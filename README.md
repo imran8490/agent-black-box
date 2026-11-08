@@ -16,7 +16,8 @@ log was tampered with.
                             v
                  Black Box policy guard
         (recipient must trace to the TRUSTED instruction,
-         amount limit, prompt-injection phrases)
+         amount limit, prompt-injection phrases,
+         Walrus Memory: flagged before / known good)
                             |
             +---------------+----------------+
             v                                v
@@ -39,6 +40,12 @@ verification) goes through **Tatum's Sui gateway** using a Tatum API key sent as
 | gRPC (default) | `https://sui-<network>-grpc.gateway.tatum.io` |
 | JSON-RPC (`SUI_RPC_MODE=jsonrpc`, fallback) | `https://sui-<network>.gateway.tatum.io` |
 
+| What | Where | Tatum call |
+|---|---|---|
+| Pay + `record_decision` transaction | `src/lib/sui.ts` | Sui gRPC `signAndExecuteTransaction` |
+| Read the `DecisionRecorded` event (Verify page) | `src/lib/sui.ts` | Sui gRPC `getTransaction` |
+| Preflight (`check:rpc`, `check:mainnet`) | `scripts/` | chain id, balances |
+
 `npm run check:rpc` tries grpc, grpcweb and jsonrpc and tells you which one your key can reach. The dashboard header shows
 "RPC by Tatum" and the Verify page's chain reads use the same client, so verification also runs on Tatum.
 
@@ -53,7 +60,7 @@ verification) goes through **Tatum's Sui gateway** using a Tatum API key sent as
 
 ```
 move/black_box/        Move package (record_decision, DecisionLog, DecisionRecorded)
-src/lib/agent.ts       Agent loop (Claude tool use, or a scripted agent without an API key)
+src/lib/agent.ts       Agent loop (Claude, Gemini or any OpenAI-compatible model with tool use, or a scripted agent without a key)
 src/lib/guard.ts       Provenance + limit policy
 src/lib/walrus.ts      Store blobs via @mysten/walrus + upload relay (mainnet), read via the public aggregator
 src/lib/memory.ts      Walrus Memory (MemWal): remember decisions, recall earlier incidents
@@ -61,6 +68,9 @@ src/lib/sui.ts         Tatum-backed Sui client, atomic pay+record transaction, r
 src/lib/verify.ts      Independent verification from a tx digest
 src/app/               Dashboard: Live Feed, Attack Demo, Verify, Decision detail
 scripts/run-agent.ts   CLI runner
+scripts/bench.ts       How often does YOUR model follow the hidden text (no chain, no money)
+scripts/check-*.ts     Preflight: Tatum RPC, mainnet, Walrus Memory
+scripts/record-demo.mjs  Auto-record the Attack Lab demo
 ```
 
 ## Setup (about 15 minutes)
@@ -109,8 +119,11 @@ Put the `suiprivkey1...` value in `SUI_PRIVATE_KEY` in `.env.local`. Never use y
 
 **5. Choose the agent**
 
-- Set `GEMINI_API_KEY` (Google Gemini) or `ANTHROPIC_API_KEY` (Claude) to use a live model agent, or
-- leave it empty to use the scripted agent (same pipeline, canned reasoning; the UI labels it).
+- Set `ANTHROPIC_API_KEY` (Claude), `GEMINI_API_KEY` (Google Gemini) or `OPENAI_API_KEY` (OpenAI, or any
+  OpenAI-compatible gateway via `OPENAI_BASE_URL`, e.g. `https://api.openai.com/v1`) to use a live model agent.
+  Force one with `AGENT_PROVIDER=anthropic|gemini|openai|scripted` and pick the model with `OPENAI_MODEL` etc.
+- Leave all keys empty to use the scripted agent (same pipeline, canned reasoning; the UI labels it).
+- `AGENT_PROMPT=standard` (default) or `naive`, see Honest notes.
 
 **6. Preflight**
 
