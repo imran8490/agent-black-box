@@ -30,6 +30,24 @@ log was tampered with.
 Verification needs only a transaction digest: read the event from Sui, download the blob from
 Walrus, recompute the hash, compare, and cross-check the log's claims against what the chain recorded.
 
+## Screenshots (real mainnet runs)
+
+**The attack:** the invoice looks normal to a human, but an invisible element tells the agent the wallet changed.
+
+![Hidden prompt injection in the invoice page](docs/hidden-injection.jpg)
+
+**Walrus Memory recalls the page:** the second time the agent opens that page, memory says it carried an attack before.
+
+![Walrus Memory: this page was flagged before](docs/memory-page-flagged.jpg)
+
+**The guard blocks the payment** (and the block is recorded on Sui and Walrus).
+
+![Black Box blocked the payment](docs/guard-blocked.jpg)
+
+**Dashboard** (counts are from my own test runs).
+
+![Dashboard](docs/dashboard.jpg)
+
 ## Built with Tatum
 
 All Sui RPC traffic (submitting the pay+record transaction, reading the `DecisionRecorded` event back for
@@ -150,7 +168,7 @@ long-term memory through [Walrus Memory](https://docs.wal.app/walrus-memory/sdk/
   - `known recipient, N earlier clean payments, no incident` shown for a vendor that was paid cleanly before;
   - `no earlier incident for this recipient` first time seen.
 - when the agent opens a page it also recalls whether **that page** (URL) carried an attack in an earlier decision (`source_flagged_before`).
-  This page-level recall is the newest part and the least tested.
+  This page-level recall is the newest part. It has fired on mainnet (11 earlier matches for the hijacked invoice page) but has only been tried on the two demo invoices.
 
 Switches: `MEMORY_GUARD=off` skips recall, `MEMORY_IGNORE_ADDRESSES=0x..,0x..` never lets old memories flag those addresses.
 `npm run lookup -- 0x...` shows what memory holds for an address.
