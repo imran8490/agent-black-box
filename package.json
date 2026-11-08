@@ -1,0 +1,43 @@
+{
+  "name": "agent-black-box",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A flight recorder for AI agents: reasoning stored on Walrus, hash committed on Sui in the same transaction as the payment.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "bench": "tsx scripts/bench.ts",
+    "check:memwal": "tsx scripts/check-memwal.ts",
+    "check:mainnet": "tsx scripts/check-mainnet.ts",
+    "check:rpc": "tsx scripts/check-rpc.ts",
+    "lookup": "tsx scripts/lookup-address.ts",
+    "agent": "tsx scripts/run-agent.ts",
+    "move:build": "sui move build --path move/black_box",
+    "move:publish": "sui client publish --gas-budget 100000000 move/black_box"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "@google/genai": "^2.32.0",
+    "@grpc/grpc-js": "^1.14.7",
+    "@mysten-incubation/memwal": "^0.1.12",
+    "@mysten/sui": "^2.0.0",
+    "@mysten/walrus": "^1.2.37",
+    "@protobuf-ts/grpc-transport": "^2.11.1",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^4.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}

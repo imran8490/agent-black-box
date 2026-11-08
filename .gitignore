@@ -1,0 +1,13 @@
+node_modules
+.next
+.env
+.env.local
+next-env.d.ts
+*.tsbuildinfo
+data/decisions.json
+data/logs
+move/black_box/build
+
+demo-clips
+
+*Zone.Identifier

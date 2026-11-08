@@ -1,0 +1,11 @@
+[package]
+name = "black_box"
+edition = "2024"
+
+# Recent Sui CLIs add the Sui framework implicitly. If your CLI is older and
+# complains about a missing dependency, uncomment the next two lines:
+# [dependencies]
+# Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
+
+[addresses]
+black_box = "0x0"
