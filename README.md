@@ -273,3 +273,19 @@ Everything below is on Sui mainnet and can be checked independently.
 **Check it yourself:** open the Verify page, pick the BLOCKED decision. It fetches the blob from Walrus, re-hashes it, and compares with the `log_hash` in the Sui event above (shown as a green "match").
 
 Note: in the demo the honest vendor address is the agent's own wallet; the attacker address is a separate wallet I control.
+
+## Mainnet proof
+
+Everything below is on Sui mainnet and can be checked independently.
+
+| What | Value |
+|---|---|
+| Move package (`black_box`) | [`0xee7d6cb65b12192df5b973d53ef5dd34430f389d3d15093f8f0a071b2f55f6ac`](https://suiscan.xyz/mainnet/object/0xee7d6cb65b12192df5b973d53ef5dd34430f389d3d15093f8f0a071b2f55f6ac) |
+| Blocked hijack (`DecisionRecorded`: `action=blocked`, `risk_flagged=true`) | [`5J7QxmFqCiGhLVJqS4ZaAau19eaL32mWnLqFLJkEcxpn`](https://suiscan.xyz/mainnet/tx/5J7QxmFqCiGhLVJqS4ZaAau19eaL32mWnLqFLJkEcxpn) |
+| Frozen `DecisionLog` object | `0xf6c487205a50a8adec1462304fe9522fcfa303f692a2f5a6e97e8eb74b10168c` |
+| Audit blob on Walrus | `Q5yX-jj8JbNC9QQR2yhJhJOCzVC72XemQRtbxm6zEqg` |
+| Walrus Memory writes on mainnet | 50+ (contest minimum is 10) |
+
+**Check it yourself:** open the Verify page, pick the BLOCKED decision. It fetches the blob from Walrus, re-hashes it, and compares with the `log_hash` in the Sui event above (shown as a green "match").
+
+Note: in the demo the honest vendor address is the agent's own wallet; the attacker address is a separate wallet I control.
